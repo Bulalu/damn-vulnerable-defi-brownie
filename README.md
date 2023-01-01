@@ -9,10 +9,10 @@ To run the solutions, you will need to have Python 3.6 or higher and Brownie ins
 
 
 ## Challenges
-The challenges are organized into different folders within the `test` folder, each one containing a  script with the solution. To run a solution, navigate to the corresponding folder and run the following command: \
+The challenges are organized into different folders within the `test` folder, each one containing a  script with the solution.\ To run a solution, navigate to the corresponding folder and run the following command: \
 ```brownie test tests/{name_of_folder}/test_{name_of_script}.py -s --disable-warnings```
 \
-example;
+example;\
 ```brownie test tests/unstoppable/test_unstoppable.py -s --disable-warnings```
 \
 I hope you have as much fun solving these challenges as I did! Don't hesitate to reach out if you have any questions or suggestions. Good luck!
