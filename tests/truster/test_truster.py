@@ -1,4 +1,4 @@
-from brownie import TrusterLenderPool, DamnValuableToken, Wei, accounts, reverts
+from brownie import TrusterLenderPool, DamnValuableToken, Attacker, Wei, accounts, reverts
 
 
 # deploy the contracts / set up
@@ -19,9 +19,12 @@ def setup_contracts():
     pool = TrusterLenderPool.deploy(token, {"from": deployer})
 
     #configuring the contracts 🧑‍💻
+    token.approve(pool, TOKENS_IN_POOL, {"from": deployer})
     token.transfer(pool, TOKENS_IN_POOL, {"from": deployer})
 
     
+    #ensure that the correct balances have been transfered
+
     assert token.balanceOf(pool) == TOKENS_IN_POOL
     assert token.balanceOf(attacker) == INITIAL_ATTACKER_TOKEN_BALANCE
 
@@ -32,17 +35,13 @@ def setup_contracts():
 def test_attacking_the_contract():
     
     deployer, attacker, token, pool  = setup_contracts()
-    quagmire = accounts[3]
-
-    # quagmire taking a flash a loan to show its possible
-    #receiver_contract = ReceiverUnstoppable.deploy(pool, {"from": quagmire})
-
-    #receiver_contract.executeFlashLoan(10, {"from": quagmire})
 
     # CODE YOUR EXPLOIT HERE 😈
-    #token.transfer(pool, INITIAL_ATTACKER_TOKEN_BALANCE, {"from": attacker})
+    attacker_contract = Attacker.deploy({"from": attacker})
 
+    attacker_contract.attack(pool, token)
     # SUCCESS CONDITIONS 🕺
-    # It's no longer possible to execute flash loans
-    #with reverts():
-    #    receiver_contract.executeFlashLoan(10, {"from": quagmire})
+    # All of the tokens have been withdrawn from the pool
+    assert token.balanceOf(attacker) == TOKENS_IN_POOL    
+    assert token.balanceOf(pool) == INITIAL_ATTACKER_TOKEN_BALANCE
+    
